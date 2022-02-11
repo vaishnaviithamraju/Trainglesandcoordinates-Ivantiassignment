@@ -1,0 +1,22 @@
+.labeltext{
+    font-size: unset;
+    padding-right: 4px;
+}
+.labelandbox{
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    flex-direction: row; 
+}
+
+.coordinates-box label{
+    margin-right: 15px;
+}
+.bigbox{
+    border-width: medium;
+    border: double;
+    margin: 50px 4%;
+}
+input:focus::placeholder {
+    color: transparent;
+  }
