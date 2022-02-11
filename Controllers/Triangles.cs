@@ -1,28 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Newtonsoft.Json;
+using System.Web;
 
 namespace TrianglesAndCoordinates.Controllers
 {
+    [Route("[controller]")]
     [ApiController]
-    [System.Web.Http.Route("[controller]")]
-    public class Triangles : ControllerBase
+    public class TrianglesController : ControllerBase
     {
-        private readonly ILogger<Triangles> _logger;
+        private readonly ILogger<TrianglesController> _logger;
 
-        private readonly CoordinatesManager _coordinateManager;
+        private readonly CoordinatesManager _coordinateManager = new CoordinatesManager();
 
-        public Triangles(ILogger<Triangles> logger, CoordinatesManager coordinatesManager)
+        public TrianglesController(ILogger<TrianglesController> logger)
         {
             _logger = logger;
-            _coordinateManager = coordinatesManager;
         }
 
-        [System.Web.Http.HttpGet]
-        public ActionResult<List<(int, int)>> GetCoordinates(string triangleName)
+        [HttpGet]
+        [Route("{triangleName}")]
+        public ActionResult<IList<Coordinate>> GetCoordinates(string triangleName)
         {
             try
             {
@@ -45,17 +47,19 @@ namespace TrianglesAndCoordinates.Controllers
             }
 
         }
-
-        public ActionResult<string> GetTriangleName((int, int)[] vertices)
+        [HttpGet("GetTriangleName")]
+        public ActionResult<string> GetTriangleName([FromQuery] string inputcoordinates)
         {
             try
             {
-                if (vertices.Length == 0 || vertices == null)
+                var readthecoordinates =  HttpUtility.UrlDecode(inputcoordinates);
+                List<Coordinate> vertices = JsonConvert.DeserializeObject<List<Coordinate>>(readthecoordinates);
+                if (vertices == null || vertices.Count != 3)
                 {
                     return BadRequest("Invalid Input");
                 }
-                var coordinates = _coordinateManager.GetTriangleName(vertices);
-                return Ok(coordinates);
+                var nameofTriangle = _coordinateManager.GetTriangleName(vertices);
+                return nameofTriangle;
 
             }
             catch (InvalidTriangleInputException ex)

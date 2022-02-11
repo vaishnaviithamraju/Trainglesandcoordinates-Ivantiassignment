@@ -35,8 +35,8 @@ namespace TrianglesAndCoordinates
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseHttpsRedirection();
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200"));
 
             app.UseRouting();
 
@@ -44,7 +44,9 @@ namespace TrianglesAndCoordinates
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                                name: "default",
+                                pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
