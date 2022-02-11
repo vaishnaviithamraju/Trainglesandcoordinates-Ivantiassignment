@@ -1,6 +1,6 @@
 # TrianglesAndCoordinates-IvantiAssignment
 
-The repo contains two projects.
+The repo contains two projects frontend is on master branch and backend is on masterforbackend branch
 
 One a frontend application that is written on angular. The two screens facilitate the solution to the two questions.
 
